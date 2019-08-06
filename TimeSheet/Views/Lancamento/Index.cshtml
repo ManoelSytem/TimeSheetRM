@@ -1,0 +1,165 @@
+﻿@model TimeSheet.ViewModel.ViewModelMacacao
+
+@{
+    Layout = null;
+}
+
+
+<div class="my-row">
+    <div class="col-md-12">
+        <div class="card azulc-azule">
+            <div class="card-header">
+                Novo Lançamento
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-1">
+                        <label for="HoraInicio">Hora Início</label>
+                        @Html.HiddenFor(model => model.Lancamento.Seq, new { htmlAttributes = new { @class = "form-control", @placeholder = "", } })
+                        @Html.EditorFor(model => model.Lancamento.HoraInicio, new { htmlAttributes = new { @type = "time", @class = "form-control col-md-18", @placeholder = "Dia do Mês" } })
+                        <span asp-validation-for="Lancamento.HoraInicio" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-1 col-sm-4">
+                        <label for="HoraFim">Hora Fim</label>
+                        @Html.EditorFor(model => model.Lancamento.HoraFim, new { htmlAttributes = new { @type = "time", @class = "form-control col-md-12", @placeholder = "Início" } })
+                        <span asp-validation-for="Lancamento.HoraFim" class="text-danger"></span>
+                    </div>
+                    <div class="col-xs-8 col-sm-4">
+                        <div class="form-group col-md-14">
+                            @Html.LabelFor(model => model.Lancamento.Projetos)
+                            <div class="input-group mb-3">
+                                <input id="nomeEmpreendimento" type="text" class="form-control">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="CarregarEmpreendimentos();"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                            @Html.DropDownListFor(model => model.Lancamento.EmpreendimentoIds, new List<SelectListItem>(), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Lancamento.Projetos, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-2 coddivergencia">
+                        <label for="DiaFim">Código de divergência</label>
+                        <div class="input-group mb-3">
+                            <input class="form-control col-md-12 text-box single-line ui-autocomplete-input" id="searchInput"  placeholder="Informe o código de divergência..." type="text">
+                            @Html.HiddenFor(model => model.Lancamento.CodDivergencia, new { htmlAttributes = new { @type = "text", @class="form-control  col-md-8", @placeholder = "Informe o código de divergência..." } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Lancamento.CodDivergencia, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6">
+                        <label for="Observacao">
+                            Observação
+                        </label>
+                        @Html.TextAreaFor(model => model.Lancamento.Observacao, new { @Id = "comentario", @maxlength = "60", @class = "form-control comment", @cols = 50, @rows = 7 })
+                        <h7 class="float-right" id="totalCar"></h7>
+                        @Html.ValidationMessageFor(model => model.Lancamento.Observacao, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#searchInput").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Url.Action("GetSearchValue", "Lancamento")',
+                dataType: "json",
+                data: { search: $("#searchInput").val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.codigo + "-" + item.descricao + " - " + item.constant, value: item.codigo};
+                    }));
+                },
+                error: function (xhr, status, error) {
+                    alert("Error");
+                }
+            });
+        },
+        select: function (event, ui) {
+            $("#searchInput").val(ui.item.label);
+            var codigo = ui.item.label;
+            $("#Lancamento_CodDivergencia").val(codigo.substr(0, 3));
+            return false;
+        }
+});
+                        function CarregarEmpreendimentos() {
+                            if ($("#nomeEmpreendimento").val().length >= 3) {
+                                $('.loader-overlay').show();
+                                $.ajax({
+                                    url:'@Url.Action("GetEmpreendimentos", "Lancamento")',
+                                    data: { nome: $("#nomeEmpreendimento").val() },
+                                    type: 'get'
+                                }).done(function (data) {
+                                    CarregarDadosEmpreendimento(data);
+                                    $('.loader-overlay').hide();
+                                });
+                            } else {
+                                Information("Não é possível realizar pesquisa com menos de 3 caracteres.");
+                            }
+    }
+
+    function CarregarDadosEmpreendimento(data) {
+        $('#Lancamento_EmpreendimentoIds').empty();
+        $('#Lancamento_EmpreendimentoIds option:not(:selected)').remove();
+        for (var i in data) {
+            if ($('#Lancamento_EmpreendimentoIds option[value="' + data[i].codigoProtheus + '"]').val() === undefined) {
+                if (data[i].codigoProtheus === 'ZZZZZ') {
+                    $('#Lancamento_EmpreendimentoIds').append('<option value="' + data[i].codigoProtheus + '-' + data[i].fase + '">' + data[i].codigoProtheus + ' - ' + data[i].nome);
+                } else {
+                 $('#Lancamento_EmpreendimentoIds').append('<option value="' + data[i].codigoProtheus + '-' + data[i].fase + '">' + data[i].codigoProtheus + ' - ' + data[i].nome + '- Fase -' + data[i].fase + '</option>');
+                }
+               
+            }
+        }
+    }
+
+
+    $("#Lancamento_EmpreendimentoIds").change(function () {
+        var selectedVal = $(this).find(':selected').text();
+        $("#nomeEmpreendimento").val(selectedVal);
+    });
+
+
+    var carMaximo = $('.comment').attr('maxlength');
+    $('#totalCar').html(carMaximo + ' restante(s)');
+
+    $('.comment').keyup(function () {
+        var countCar = $(this).val().length;
+        var calcCar = carMaximo - countCar;
+        var texto = $(this).parent().find('h7').first();
+
+        if (calcCar <= 30 && calcCar >= 15) {
+            texto.css("color", "red");
+        }
+        else if (calcCar <= 14) {
+            texto.css("color", "#990000");
+        }
+        else {
+            texto.css("color", "black");
+        }
+
+        texto.html(calcCar + ' restante(s)');
+
+    });
+
+    function BuscarCodigoDivergencia() {
+            if ($("#searchInput").val().length >= 3) {
+                                $('.loader-overlay').show();
+                                $.ajax({
+                                    url:'@Url.Action("GetEmpreendimentos", "Lancamento")',
+                                    data: { nome: $("#nomeEmpreendimento").val() },
+                                    type: 'get'
+                                }).done(function (data) {
+                                    CarregarDadosEmpreendimento(data);
+                                    $('.loader-overlay').hide();
+                                });
+                            } else {
+                                Information("Não é possível realizar pesquisa com menos de 3 caracteres.");
+                            }
+    }
+ 
+</script>

@@ -1,0 +1,298 @@
+﻿@model TimeSheet.ViewModel.ViewModelRelatorio
+
+
+@{
+    Layout = "";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Time Sheet</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <style type="text/css">
+        * {
+            font-family: Arial;
+        }
+
+        body {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100%;
+            margin: 5px auto;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            border: #000 1px solid;
+            vertical-align: middle;
+            padding: 3px 5px 3px 5px;
+        }
+
+        .text-left {
+            text-align: left;
+            font-size: 11px;
+        }
+
+        .text-right {
+            text-align: right;
+            font-size: 11px;
+        }
+
+        .text-center {
+            text-align: center;
+            font-size: 11px;
+        }
+
+        table {
+            page-break-inside: auto
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        td {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+
+        thead {
+            display: table-header-group
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+
+        tbody {
+            display: table-row-group;
+        }
+    </style>
+</head>
+<body>
+    Data de emisão:  @DateTime.Now.ToString("dd/MM/yyyy")
+    <table style="height:50px; text-align: center; font-size:20px;" class="table">
+        <tr>
+            <td><b>Time Sheet</b></td>
+            @if (Model.status == "1")
+            {
+                <td style="width:40px;"><b>Status: Aberto</b></td> }
+            else if (Model.status == "2")
+            {
+                <td style="width:40px;"><b>Status: Fechado</b></td>}
+            else if (Model.status == "3")
+            {
+                <td style="width:40px;"><b>Status: Aprovado</b></td>}
+            else if (Model.status == "4")
+            {
+                <td style="width:40px;"><b>Status: Contabilizado</b></td>}
+            <td style="width:30px;"><b>@Model.marcacao.AnoMesDescricao</b></td>
+        </tr>
+    </table>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <td class="text-left" style="font-size:14px;">
+                    <b>Matrícula: @Model.user.SubjectId</b>
+                </td>
+                <td class="text-left" style="font-size:14px; width:650px;">
+                    <b>Nome:  @Model.user.Nome</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left" colspan="2" style="font-size:14px;">
+                    <b>Coordenação: @Model.user.Gerencia</b>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table">
+
+        <tbody>
+            @if (Model != null)
+            {
+                var datalancamento = "0";
+                var dataApontametoLista = "0";
+                var datalancamentoFechamento = "0";
+                var primeiraHora = TimeSpan.Parse("00:00:00");
+                @foreach (var item in Model.apontamento.OrderBy(x => x.dataApontamento))
+                {
+                    @if (datalancamentoFechamento != item.dataApontamento)
+                    {
+                        <tr>
+                            <th colspan="7"><b>Fechamento</b></th>
+                        </tr>
+                        <tr>
+                            <th style=" font-size:14px;" class="text-center">Data Lançamento</th>
+                            <th style=" font-size:14px;" class="text-center">Horas excedentes</th>
+                            <th style=" font-size:14px;" class="text-center">Horas não trabalhadas</th>
+                            <th style=" font-size:14px;" class="text-center">Horas abonadas</th>
+                            <th style=" font-size:14px;" class="text-center">Total de horas trabalhadas</th>
+                            <th style=" font-size:14px;" class="text-center">Divergência</th>
+                            <th style=" font-size:14px;" class="text-center"></th>
+                        </tr>
+                    <tbody>
+                        @if (Model.FechamentoPorDatalancamento != null)
+                        {
+                            foreach (var itemF in Model.FechamentoPorDatalancamento.OrderBy(x => x.DataLancamento))
+                            {
+                                datalancamentoFechamento = itemF.DataLancamento.ToDateProtheusReverseformate();
+                                if (item.dataApontamento == datalancamentoFechamento)
+                                {
+                                    if (Model.status == "2" | Model.status == "3" | Model.status == "4")
+                                    {
+                        <tr>
+                            <th scope="row">@itemF.DataLancamento.ToDateProtheusReverseformate()</th>
+                            <td>@string.Format("{0:n2}", itemF.TotalHoraExedente)</td>
+                            <td>@string.Format("{0:n2}", itemF.TotalFaltaAtraso)</td>
+                            <td>@string.Format("{0:n2}", itemF.TotalAbono)</td>
+                            <td>@string.Format("{0:n2}", itemF.TotalHora)</td>
+                            <td>@string.Format("{0:n2}", itemF.Divergencia)</td>
+                            <td></td>
+                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <th scope="row">@itemF.DataLancamento.ToDateProtheusReverseformate()</th>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    datalancamentoFechamento = item.dataApontamento;
+                                }
+                            }
+                        }
+                    </tbody>
+                }
+                    var count = 0;
+                    <tr>
+                        @if (datalancamento != item.dataApontamento)
+                        {
+
+                        <tr>
+                            <th colspan="7"><b>Relógio</b></th>
+                        </tr>
+                        <tr>
+                            <th style=" font-size:14px;" class="text-center">Hora</th>
+                            <th style=" font-size:14px;" class="text-center">Hora</th>
+                            <th style=" font-size:14px;" class="text-center">Hora</th>
+                            <th style=" font-size:14px;" class="text-center">Hora</th>
+                            <th style=" font-size:14px;" class="text-center">Hora</th>
+                            <th style=" font-size:14px;" class="text-center">Hora</th>
+                            <th style=" font-size:14px;" class="text-center">Hora</th>
+                        </tr>
+                        datalancamento = item.dataApontamento;
+                        @foreach (var itemA in Model.apontamento)
+                        {
+                            count++;
+                            @if (datalancamento == itemA.dataApontamento)
+                            {
+
+                                if (count <= 7)
+                                {
+                                    if (itemA.apontamento == TimeSpan.Parse("00:00:00"))
+                                    {
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@itemA.apontamento.ToString(@"hh\:mm")</td>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>@itemA.apontamento.ToString(@"hh\:mm")</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                count = 0;
+                                continue;
+                            }
+                        }
+
+
+                    }
+                        </tr>
+
+
+                        @if (item.listLancamento != null)
+                        {
+
+                            if (dataApontametoLista != datalancamento)
+                            {
+
+
+                                <tr>
+                                    <th colspan="7"><b>Lançamentos</b></th>
+                                </tr>
+                                <tr>
+                                    <th style=" font-size:14px;" class="text-center">Hora Início</th>
+                                    <th style=" font-size:14px;" class="text-center">Hora Fim</th>
+                                    <th style=" font-size:14px;" class="text-center">Projeto</th>
+                                    <th style=" font-size:14px;" class="text-center">Código Divergência</th>
+                                    <th style=" font-size:14px;" class="text-center"></th>
+                                    <th style=" font-size:14px;" class="text-center"></th>
+                                    <th style=" font-size:14px;" class="text-center"></th>
+                                </tr>
+                                <tbody>
+                                    @foreach (var itemLista in item.listLancamento.OrderBy(x => x.HoraInicio))
+                                    {
+                                        dataApontametoLista = itemLista.DateLancamento.ToDateProtheusReverseformate();
+                                        <tr>
+                                            <td>@itemLista.HoraInicio.ToString(@"hh\:mm")</td>
+                                            <td>@itemLista.HoraFim.ToString(@"hh\:mm")</td>
+                                            <td style=" font-size:12px;">@itemLista.DescricaoEmp</td>
+                                            <td>@itemLista.CodDivergencia - @itemLista.DescricaoCodDiv</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+
+                                        @if (itemLista.Observacao != null)
+                                        {
+                                            <tr>
+                                                <td class="text-left" colspan="5" style="font-size:15px;">
+                                                    <b>
+                                                        Observação:
+                                                    </b>
+                                                    @itemLista.Observacao
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+
+                            }
+
+                        }
+
+
+                    }
+            }
+            </tbody>
+        </table>
+
+    </body>
+</html>
