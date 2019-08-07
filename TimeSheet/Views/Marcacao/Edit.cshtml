@@ -113,34 +113,7 @@
         });
     }
 
-    window.onload = function () {
-           $.ajax({
-                url: '@Url.Action("ListApontamento", "Marcacao")',
-                changeMonth: true,
-                changeYear: true,
-                dataType: 'json',
-                type: 'get',
-               data: { data: $("#DateSelect").val(), matricula: $("#MatUsuario").val() },
-                success: function (data) {
-                    if (data.erro != undefined) {
-                        Information(data.msg);
-                    } else {
-                        $('#tbCabecalhoMarcacao tbody td').remove();
-                        $('#tbCabecalhoMarcacao thead tr th').remove();
-                        for (var i = 0; data.length > i; i++) {
-                            if (i%2 == 0) {
-                                $('#tbCabecalhoMarcacao thead tr').append('<th>Entrada</th>');
-                            } else {
-                                $('#tbCabecalhoMarcacao thead tr').append('<th>Saída</th>');
-                            }
-                            $('#tbCabecalhoMarcacao tbody').append('<td>' + data[i].apontamento.substring(0,5) + '</td>' +
-                                '</td>');
-                        }
-                        ObterListaLancamento();
-                    }
-                }
-            });
-    }
+ 
 
     function Create() {
         $("#salvar").show();

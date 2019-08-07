@@ -279,7 +279,7 @@ namespace TimeSheet.Infrastructure.Repository
 
                 foreach (Feriado feriadoResult in QueryResult)
                 {
-                    feriado.Data = feriadoResult.Data;
+                    feriado.DataFeriado = feriadoResult.DataFeriado;
                     feriado.Descricao = feriadoResult.Descricao;
                     feriado.Filial = feriadoResult.Filial;
                     feriado.Fixo = feriadoResult.Fixo;
@@ -293,7 +293,7 @@ namespace TimeSheet.Infrastructure.Repository
 
                     foreach (Feriado feriadoResult in QueryResult2)
                     {
-                        feriado.Data = feriadoResult.Data;
+                        feriado.DataFeriado = feriadoResult.DataFeriado;
                         feriado.Descricao = feriadoResult.Descricao;
                         feriado.Filial = feriadoResult.Filial;
                         feriado.Fixo = feriadoResult.Fixo;

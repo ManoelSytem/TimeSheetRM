@@ -10,20 +10,22 @@ namespace TimeSheet.Infrastructure.ServiceRepository
     public class ProtheusServiceRepository : IProtheus
     {
         private readonly ProtheusRepository _prothuesRepository;
+        private readonly RMRepository _rmRepository;
 
         public ProtheusServiceRepository()
         {
             _prothuesRepository = new ProtheusRepository();
+            _rmRepository = new RMRepository();
         }
 
         public List<Apontamento> ObterBatidasDePonto(string mat, string filial, string Data)
         {
-            return _prothuesRepository.ObterListBatidaDePontoDiario(mat, filial, Data);
+            return  _rmRepository.ObterListBatidaDePontoDiario(mat, filial, Data);
         }
 
         public CodDivergencia ObterCodigoDivergenciaPorCodigo(string cod)
         {
-            return _prothuesRepository.ObterCodigoDivergenciaPorCodigo(cod);
+            return _rmRepository.ObterCodigoDivergenciaPorCodigo(cod);
         }
 
         public Usuario ObterCoordenadorPorCentroDeCusto(string centroCusto)
@@ -33,12 +35,12 @@ namespace TimeSheet.Infrastructure.ServiceRepository
 
         public Feriado ObterFeriadoPorDataLancamento(string data, string filial)
         {
-            return _prothuesRepository.ObterFeriadoProthues(data, filial);
+            return _rmRepository.ObterFeriado(data, filial);
         }
 
         public IEnumerable<CodDivergencia> ObterListCodDivergenciaPordescricao(string descricao)
         {
-            return _prothuesRepository.ObterListaCodigoDivergenciaPorIdDesc(descricao);
+            return _rmRepository.ObterListaCodigoDivergenciaPorIdDesc(descricao);
         }
 
         public List<Usuario> ObterListColaboradorPorCentroDeCusto(string descricao, string centroCusto)
