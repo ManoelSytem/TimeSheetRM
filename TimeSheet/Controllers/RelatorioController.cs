@@ -33,6 +33,7 @@ namespace TimeSheet.Controllers
         private readonly IFechamento _fechamentoService;
         private readonly ILancamentoNegocio _lancamentoNegocio;
         private readonly IFechamentoNegocio _fechamentoNegocio;
+      
 
 
         public RelatorioController(IFechamento 

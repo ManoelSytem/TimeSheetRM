@@ -120,9 +120,7 @@ namespace TimeSheet.Infrastructure.Repository
                     dbConnection.Open();
                     dbConnection.Execute(sQuery);
                     var result =  dbConnection.Query<Fechamento>(sQuery);
-
                     return result;
-
                 }
             }
             catch (Exception ex)
@@ -152,7 +150,6 @@ namespace TimeSheet.Infrastructure.Repository
                     dbConnection.Execute(sQuery);
                     var result = dbConnection.Query<Fechamento>(sQuery);
                     return result;
-
                 }
             }
             catch (Exception ex)

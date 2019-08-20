@@ -261,8 +261,7 @@ namespace TimeSheet.Application
         }
         public bool ValidaEferiado(string data, string filial)
         {
-            ProtheusRepository serviceProthues = new ProtheusRepository();
-            var feriado = serviceProthues.ObterFeriadoProthues(data, filial);
+            var feriado = _serviceProthues.ObterFeriadoPorDataLancamento(data, filial);
             if (feriado.Descricao == null)
             {
                 return false;

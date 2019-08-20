@@ -12,7 +12,7 @@ namespace TimeSheet.Infrastructure.Repository
     public class RMRepository
     {
         //base teste
-        private const string ConnectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=bgasxl01.intranet.bahiagas.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ap12hml)));User Id=rm;Password=rm;";
+        private const string ConnectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.0.8)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ap12hml)));User Id=rm;Password=rm;";
         private OracleConnection Conexao;
 
 
@@ -79,15 +79,29 @@ namespace TimeSheet.Infrastructure.Repository
 
         public Feriado ObterFeriado(string data, string filial)
         {
+            var erro = "";
             Conexao.Open();
             try
             {
+                if (filial.Length == 1)
+                    filial = "0" + filial;
 
-                Feriado feriado = new Feriado(); ;
-                var sqlUser = $@"SELECT CODCALENDARIO as Filial, FERIADO AS Fixo, TO_CHAR(DIAFERIADO) AS DataFeriado, NOME AS Descricao FROM
+
+                var sqlUser = "";
+
+                Feriado feriado = new Feriado();
+
+                if (data.Length == 8) { 
+                   sqlUser = $@"SELECT CODCALENDARIO as Filial, FERIADO AS Fixo, TO_CHAR(DIAFERIADO) AS DataFeriado, NOME AS Descricao FROM
                                  GFERIADO WHERE DIAFERIADO= TO_DATE('{data.ToDateProtheusReverseformate()}') AND CODCALENDARIO='{filial}'";
-                var QueryResult = Conexao.Query<Feriado>(sqlUser);
+                }
+                else
+                {
+                    sqlUser = $@"SELECT CODCALENDARIO as Filial, FERIADO AS Fixo, TO_CHAR(DIAFERIADO) AS DataFeriado, NOME AS Descricao FROM
+                                 GFERIADO WHERE DIAFERIADO= TO_DATE('{data}') AND CODCALENDARIO='{filial}'";
+                }
 
+                var QueryResult = Conexao.Query<Feriado>(sqlUser);
                 foreach (Feriado feriadoResult in QueryResult)
                 {
                     feriado.DataFeriado = feriadoResult.DataFeriado;
@@ -99,6 +113,7 @@ namespace TimeSheet.Infrastructure.Repository
             }
             catch (Exception ex)
             {
+
                 throw ex;
             }
             finally
@@ -119,7 +134,7 @@ namespace TimeSheet.Infrastructure.Repository
                     List<Apontamento> listApontamento = new List<Apontamento>();
                     Apontamento apontamento;
 
-                    var sql = $@"SELECT LTRIM(RTRIM(TO_CHAR(ABATFUN.BATIDA/60))) as hora
+                    var sql = $@"SELECT LTRIM(RTRIM(TO_CHAR(round(ABATFUN.BATIDA/60,2)))) as hora
                                   FROM ABATFUN 
                                  WHERE ABATFUN.CODCOLIGADA=LTRIM(RTRIM('{filial}'))
                                  AND ABATFUN.CHAPA=LTRIM(RTRIM('{mat}')) 
@@ -136,7 +151,27 @@ namespace TimeSheet.Infrastructure.Repository
                             valor = ApResult.hora.Substring(virgulaIndice);
                         }
                         if (ApResult.hora.Length == 1 | ApResult.hora.Length == 2) { apontamento.apontamento = TimeSpan.Parse("0" + ApResult.hora + ":00"); }
-                        else if (valor.Length == 2) { string horaMinuto = ApResult.hora + "0"; apontamento.apontamento = TimeSpan.Parse(horaMinuto.Replace(',', ':')); }
+                        else if (ApResult.hora.Length >= 3) {
+
+                            string hora = "";
+                            int virgulaIndice = ApResult.hora.IndexOf(',');
+                            var valorMinuto = ApResult.hora.Substring(virgulaIndice+1);
+                            decimal minutos = Convert.ToDecimal("0,"+valorMinuto)*60;
+
+                            if(ApResult.hora.Substring(0, virgulaIndice).Length ==2)
+                            {
+                                hora = ApResult.hora.Substring(0, 2);
+                            }
+                            else
+                            {
+                                hora = ApResult.hora.Substring(0, 1);
+                            }
+                           
+                            decimal minutoRound = Math.Round(minutos);
+
+                            string horaMinuto = hora + Convert.ToString(":" + Convert.ToString(minutoRound));
+                            apontamento.apontamento = TimeSpan.Parse(horaMinuto);
+                        }
                         else
                         {
 
@@ -157,6 +192,35 @@ namespace TimeSheet.Infrastructure.Repository
             finally
             {
 
+            }
+
+        }
+
+        public Usuario ObterUsuarioPorMatricula(string mat)
+        {
+            Conexao.Open();
+            try
+            {
+                Usuario usuario = new Usuario();
+                var sqlUser = $@"Select NOME AS Nome from PFUNC
+                          WHERE CHAPA = LTRIM(RTRIM('{mat}'))
+                          ";
+                var QueryResult = Conexao.Query<Usuario>(sqlUser);
+
+                foreach (Usuario UserGerenciaResult in QueryResult)
+                {
+                    usuario.Nome = UserGerenciaResult.Nome;
+                }
+
+                return usuario;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                Conexao.Close();
             }
 
         }

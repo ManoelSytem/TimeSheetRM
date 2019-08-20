@@ -55,7 +55,7 @@ namespace TimeSheet.Infrastructure.ServiceRepository
 
         public Usuario ObterUsuarioNome(string mat)
         {
-            return _prothuesRepository.ObterUsuarioPorMatricula(mat);
+            return _rmRepository.ObterUsuarioPorMatricula(mat);
         }
 
         public List<Apontamento> ObterApontamentos(string matricula, string filial, string Data) => _prothuesRepository.ObterApontamentos(matricula, filial, Data);
