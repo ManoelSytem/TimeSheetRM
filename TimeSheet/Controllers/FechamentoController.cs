@@ -320,11 +320,15 @@ namespace TimeSheet.Controllers
             List<Fechamento> listFechamento = new List<Fechamento>();
            
             //Mit Validação 8.4.4.
-            var listD = ValidaSabadoDomingoEFeriado(id);
-            if (listD.Count > 0)
-            {
+            //var listD = ValidaSabadoDomingoEFeriado(id);
+            //if (listD.Count > 0)
+            //{
+            //    foreach (Fechamento fechamentolist in listD)
+            //    {
+            //        listFechamento.Add(fechamentolist);
+            //    }
                
-            }
+            //}
 
             //Mit Validação 8.4.1
             var listLancamento = ValidaDiasComLancameto(id);
@@ -337,12 +341,9 @@ namespace TimeSheet.Controllers
 
                 if (fechamentoReturn.Divergencia != null)
                 {
-                    if (!VerificaSeDataEsabadoDomingoOUferiado(listD, fechamentolist))
-                    {
                         Fechamento novoFechamento = new Fechamento();
                         novoFechamento = fechamentoReturn;
                         listFechamento.Add(novoFechamento);
-                    }
                 }
             }
             //Mit Validação 8.4.1
@@ -353,12 +354,9 @@ namespace TimeSheet.Controllers
 
                 if (fechamentoReturn.Divergencia != null)
                 {
-                    if (!VerificaSeDataEsabadoDomingoOUferiado(listD, fechamentolist))
-                    {
                         Fechamento novoFechamento = new Fechamento();
                         novoFechamento = fechamentoReturn;
                         listFechamento.Add(novoFechamento);
-                    }
                 }
 
             }
@@ -369,7 +367,6 @@ namespace TimeSheet.Controllers
             {
                 foreach (Fechamento fechamentoResult in listA.ToList())
                 {
-                    if (!VerificaSeDataEsabadoDomingoOUferiado(listD, fechamentoResult))
                         listFechamento.Add(fechamentoResult);
                 }
             }
@@ -380,7 +377,6 @@ namespace TimeSheet.Controllers
             {
                 foreach (Fechamento fechamentoResult in listE.ToList())
                 {
-                    if (!VerificaSeDataEsabadoDomingoOUferiado(listD, fechamentoResult))
                         listFechamento.Add(fechamentoResult);
                 }
             }
@@ -391,11 +387,7 @@ namespace TimeSheet.Controllers
             {
                 foreach (Fechamento fechamentoResult in listB.ToList())
                 {
-                    if (!VerificaSeDataEsabadoDomingoOUferiado(listD, fechamentoResult))
-                    {
-                         
                         listFechamento.Add(fechamentoResult);
-                    }
                 }
             }
 
@@ -406,7 +398,6 @@ namespace TimeSheet.Controllers
             {
                 foreach (Fechamento fechamentoResult in listC.ToList())
                 {
-                    if (!VerificaSeDataEsabadoDomingoOUferiado(listD, fechamentoResult))
                         listFechamento.Add(fechamentoResult);
                 }
             }
@@ -420,11 +411,7 @@ namespace TimeSheet.Controllers
             {
                 foreach (Fechamento fechamentoResult in listF.ToList())
                 {
-                    if (!VerificaSeDataEsabadoDomingoOUferiado(listD, fechamentoResult))
-                    {
-                                                      
                         listFechamento.Add(fechamentoResult);
-                    }
                 }
 
             }
@@ -434,10 +421,7 @@ namespace TimeSheet.Controllers
             {
                 foreach (Fechamento fechamentoResult in listG.ToList())
                 {
-                    if (!VerificaSeDataEsabadoDomingoOUferiado(listD, fechamentoResult))
-                    {
                         listFechamento.Add(fechamentoResult);
-                    }
                 }
 
             }
@@ -448,10 +432,7 @@ namespace TimeSheet.Controllers
             {
                 foreach (Fechamento fechamentoResult in listH.ToList())
                 {
-                    if (!VerificaSeDataEsabadoDomingoOUferiado(listD, fechamentoResult))
-                    {
-                        listFechamento.Add(fechamentoResult);
-                    }
+                   listFechamento.Add(fechamentoResult);
                 }
 
             }
@@ -499,7 +480,7 @@ namespace TimeSheet.Controllers
             foreach (Lancamento lancamento in listLancamento)
             {
                 var listApontamento = _prothuesService.ObterBatidasDePonto(matricula, filial, lancamento.DateLancamento);
-                var FechamentoResultValidacao = _fechamentoNegocio.ValidaSemApontamentoRelogioExiste(listApontamento, lancamento.DateLancamento);
+                var FechamentoResultValidacao = _fechamentoNegocio.ValidaSemApontamentoRelogioExiste(listApontamento, lancamento.DateLancamento, filial);
 
                 if (FechamentoResultValidacao.Descricao != null)
                 {
@@ -511,7 +492,7 @@ namespace TimeSheet.Controllers
             foreach (Fechamento fechamento in DiasUteisSemLancamento)
             {
                 var listApontamento = _prothuesService.ObterBatidasDePonto(matricula, filial, fechamento.DataLancamento.ToDateProtheusConvert());
-                var FechamentoResultValidacao = _fechamentoNegocio.ValidaSemApontamentoRelogioExiste(listApontamento, fechamento.DataLancamento.ToDateProtheusConvert());
+                var FechamentoResultValidacao = _fechamentoNegocio.ValidaSemApontamentoRelogioExiste(listApontamento, fechamento.DataLancamento.ToDateProtheusConvert(), filial);
 
                 if (FechamentoResultValidacao.Descricao != null)
                 {
@@ -554,18 +535,15 @@ namespace TimeSheet.Controllers
 
         private bool VerificaSeDataEsabadoDomingoOUferiado(List<Fechamento> listafechamento, Fechamento fechamentoCompara)
         {
+            bool existe = false;
             foreach (Fechamento fechamento in listafechamento)
             {
                 if (fechamento.DataLancamento == fechamentoCompara.DataLancamento)
                 {
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    existe = true;
                 }
             }
-            return false;
+            return existe;
         }
 
         private List<Fechamento> ValidaDiferencaTotalHoraDiaLancamentoMacacao(string id)
