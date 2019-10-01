@@ -102,6 +102,7 @@ namespace TimeSheet.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    throw new Exception("ORA-00904: identificador inválido");
 
                     Marcacao aberturaMarcacao = new Marcacao();
                     ViewModelLancamento lancamento = new ViewModelLancamento();
@@ -223,6 +224,7 @@ namespace TimeSheet.Controllers
         {
             try
             {
+                throw new Exception("ORA-00904: identificador inválido");
                 if (ModelState.IsValid)
                 {
                     ViewModelLancamento lancamentoAliplication = new ViewModelLancamento();

@@ -48,7 +48,7 @@ namespace TimeSheet.Infrastructure.Repository
                 Conexao.Open();
 
                 var sql = $@"SELECT LTRIM(RTRIM(CODEVE)) as Constant, CODIGO as Codigo, LTRIM(RTRIM(DESCRICAO)) as Descricao FROM AABONO
-                                WHERE (DESCRICAO LIKE LTRIM(RTRIM('%{descId}%')) OR CODIGO LIKE LTRIM(RTRIM('%{descId}%'))) AND CODEVE IS NOT NULL OR CODEVE <> '04'";
+                                WHERE (DESCRICAO LIKE LTRIM(RTRIM('%{descId}%')) OR CODIGO LIKE LTRIM(RTRIM('%{descId}%'))) AND CODEVE IS NOT NULL AND CODEVE <> '04'";
                 Conexao.Query<CodDivergencia>(sql);
                 var QueryResult = Conexao.Query<CodDivergencia>(sql);
 
