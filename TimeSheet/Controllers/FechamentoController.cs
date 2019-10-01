@@ -781,6 +781,7 @@ namespace TimeSheet.Controllers
 
         private void StartProcessoFluig(string matricula, string filial, string codMarcacao)
         {
+            var coordenacao = User.GetDados("Coordenacao");
             string[][] result;
             var Usuario = _fluigAppService.ObterUserCodFluig(User.GetClaim(ClaimTypes.Email));
             _fluigAppService.ValidarUserFluig(Usuario);

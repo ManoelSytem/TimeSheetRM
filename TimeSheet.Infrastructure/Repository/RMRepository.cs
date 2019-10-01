@@ -12,7 +12,7 @@ namespace TimeSheet.Infrastructure.Repository
     public class RMRepository
     {
         //base teste
-        private const string ConnectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.0.8)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ap12hml)));User Id=rm;Password=rm;";
+        private const string ConnectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=bgasha-scan)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=bahiagas)));User Id=rm;Password=rm;";
         private OracleConnection Conexao;
 
 

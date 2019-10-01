@@ -16,7 +16,7 @@ namespace TimeSheetDirectmail
             ProtheusRepository repository = new ProtheusRepository();
             Controlle controlle = new Controlle(repository);
             var usuarios  =  controlle.ObterTecnicos(controlle.Login("tsadministrador", "123456"), "");
-            Console.WriteLine("TimeSheet Envindo email de fechamento pendentes aguarde...");
+            Console.WriteLine("TimeSheet Enviando email de fechamento pendentes aguarde...");
             string mensagem = "";
             foreach (string mesg in controlle.Leitura())
             {
