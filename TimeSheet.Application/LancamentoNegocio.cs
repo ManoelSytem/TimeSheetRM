@@ -259,21 +259,21 @@ namespace TimeSheet.Application
                                         listFechamento.Add(novo);
                                         break;
                                     }
-                                    if (lancamentoDiario[i+1].CodDivergencia != 0 | lancamentoDiario[i].CodDivergencia != 0)
+                                    if (lancamentoDiario[i+1].CodDivergencia == 0 | lancamentoDiario[i].CodDivergencia == 0)
                                     {
                                         Fechamento novo = new Fechamento();
                                         novo.Divergencia = "Divergência justificada";
                                         novo.DataLancamento = lancamentoDiario[i].DateLancamento.ToDateProtheusReverseformate();
-                                        novo.Descricao = "Dia onde intervalo de almoço se encontra diferente do lançamento diário.";
+                                        novo.Descricao = "Dia onde intervalo se encontra fora do horário padrão de almoço.";
                                         listFechamento.Add(novo);
                                         break;
                                     }
                                     if (lancamentoDiario[i].CodDivergencia == 0 | lancamentoDiario[i+1].CodDivergencia == 0)
                                     {
                                         Fechamento novo = new Fechamento();
-                                        novo.Divergencia = "Divergência a justificar";
+                                        novo.Divergencia = "Divergência justificada";
                                         novo.DataLancamento = lancamentoDiario[i].DateLancamento.ToDateProtheusReverseformate();
-                                        novo.Descricao = "Dia onde intervalo de almoço se encontra diferente do lançamento diário.";
+                                        novo.Descricao = "Dia onde intervalo se encontra fora do horário padrão de almoço.";
                                         listFechamento.Add(novo);
                                         break;
                                     }
@@ -284,18 +284,18 @@ namespace TimeSheet.Application
                                      if (lancamentoDiario[i].CodDivergencia == 0)
                                     {
                                         Fechamento novo = new Fechamento();
-                                        novo.Divergencia = "Divergência a justificar";
+                                        novo.Divergencia = "Divergência justificada";
                                         novo.DataLancamento = lancamentoDiario[i].DateLancamento.ToDateProtheusReverseformate();
-                                        novo.Descricao = "Dia onde intervalo de almoço se encontra diferente do lançamento diário.";
+                                        novo.Descricao = "Dia onde intervalo se encontra fora do horário padrão de almoço.";
                                         listFechamento.Add(novo);
                                         break;
                                     }
-                                    else if (lancamentoDiario[i].CodDivergencia != 0)
+                                    else if (lancamentoDiario[i].CodDivergencia == 0)
                                     {
                                         Fechamento novo = new Fechamento();
                                         novo.Divergencia = "Divergência justificada";
                                         novo.DataLancamento = lancamentoDiario[i].DateLancamento.ToDateProtheusReverseformate();
-                                        novo.Descricao = "Dia onde intervalo mínimo e máximo se encontra diferente do lançamento diário.";
+                                        novo.Descricao = "Dia onde intervalo se encontra fora do horário padrão de almoço.";
                                         listFechamento.Add(novo);
                                         break;
                                     }
@@ -306,18 +306,18 @@ namespace TimeSheet.Application
                                     if (lancamentoDiario[i+1].CodDivergencia == 0)
                                     {
                                         Fechamento novo = new Fechamento();
-                                        novo.Divergencia = "Divergência a justificar";
+                                        novo.Divergencia = "Divergência justificada";
                                         novo.DataLancamento = lancamentoDiario[i].DateLancamento.ToDateProtheusReverseformate();
-                                        novo.Descricao = "Dia onde intervalo de almoço se encontra diferente do lançamento diário.";
+                                        novo.Descricao = "Dia onde intervalo se encontra fora do horário padrão de almoço.";
                                         listFechamento.Add(novo);
                                         break;
                                     }
-                                    else if (lancamentoDiario[i+1].CodDivergencia != 0)
+                                    else if (lancamentoDiario[i+1].CodDivergencia == 0)
                                     {
                                         Fechamento novo = new Fechamento();
                                         novo.Divergencia = "Divergência justificada";
                                         novo.DataLancamento = lancamentoDiario[i].DateLancamento.ToDateProtheusReverseformate();
-                                        novo.Descricao = "Dia onde intervalo de almoço se encontra diferente do lançamento diário.";
+                                        novo.Descricao = "Dia onde intervalo se encontra fora do horário padrão de almoço.";
                                         listFechamento.Add(novo);
                                         break;
                                     }
