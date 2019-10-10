@@ -225,5 +225,35 @@ namespace TimeSheet.Infrastructure.Repository
 
         }
 
+
+        public Usuario ObterListColaborador(string descricao, string centroDeCusto)
+        {
+            Conexao.Open();
+            try
+            {
+                Usuario usuario = new Usuario();
+                var sqlUser = $@" Select CHAPA as SubjectId, NOME AS Nome from PFUNC
+                                  where (LTRIM(RTRIM(NOME)) LIKE UPPER('%{descricao}%') OR LTRIM(RTRIM(CHAPA)) = '{descricao}')";
+                var QueryResult = Conexao.Query<Usuario>(sqlUser);
+
+                foreach (Usuario UserResult in QueryResult)
+                {
+                    usuario.SubjectId = Convert.ToString(UserResult.Id);
+                    usuario.Nome = UserResult.Nome;
+                }
+
+                return usuario;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                Conexao.Close();
+            }
+
+        }
+
     }
 }

@@ -10,8 +10,8 @@ namespace TimeSheet.Infrastructure.Repository
 {
     public class LancamentoRepository 
     {
-        private const string ConnectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=BGASXL01)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ap12hml)));User Id=ap6;Password=ap6;";
-        //private const string ConnectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=bgasha-scan.intranet.bahiagas.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=BAHIAGAS)));User Id=ap6;Password=msbd106";
+        //private const string ConnectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=BGASXL01)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ap12hml)));User Id=ap6;Password=ap6;";
+        private const string ConnectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=bgasha-scan.intranet.bahiagas.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=BAHIAGAS)));User Id=ap6;Password=msbd106";
 
 
         public LancamentoRepository()
@@ -65,7 +65,7 @@ namespace TimeSheet.Infrastructure.Repository
                                ZB.ZYZ_STATUS AS Status
                                FROM ZYY010 ZA
                                INNER JOIN  ZYZ010  ZB ON (ZB.ZYZ_CODIGO =  ZA.ZYY_CODIGO) 
-                               INNER JOIN  SZA010 SZ ON (ZA.ZYY_PROJET =  SZ.ZA_COD) 
+                               INNER JOIN  SZA010 SZ ON (ZA.ZYY_PROJET =  SZ.ZA_COD AND SZ.ZA_STATUS = '1') 
                                LEFT JOIN  SP6010 SP ON (ZA.ZYY_CODDIV =  SP.P6_CODIGO)
                                WHERE ZB.ZYZ_MATUSU = '{matricula}' AND ZA.ZYY_DATA = '{data}' AND ZA.D_E_L_E_T_ <> '*'";
                     dbConnection.Open();
@@ -120,7 +120,7 @@ namespace TimeSheet.Infrastructure.Repository
                                LTRIM(RTRIM(SZ.ZA_DESC)) as DescricaoEmp
                                FROM ZYY010 ZA
                                INNER JOIN  ZYZ010  ZB ON (ZB.ZYZ_CODIGO =  ZA.ZYY_CODIGO)
-                               INNER JOIN  SZA010 SZ ON (ZA.ZYY_PROJET =  SZ.ZA_COD) 
+                               INNER JOIN  SZA010 SZ ON (ZA.ZYY_PROJET =  SZ.ZA_COD AND SZ.ZA_STATUS = '1') 
                                LEFT JOIN  SP6010 SP ON (ZA.ZYY_CODDIV =  SP.P6_CODIGO)
                                WHERE ZB.ZYZ_MATUSU = '{matricula}' AND ZA.ZYY_DATA = '{data}'  AND ZYY_SEQ = '{codlancamento}' AND ZA.D_E_L_E_T_ <> '*'
                                ";
@@ -169,7 +169,7 @@ namespace TimeSheet.Infrastructure.Repository
                                LTRIM(RTRIM(SZ.ZA_DESC)) AS DescricaoEmp
                                FROM ZYY010 ZA
                                INNER JOIN  ZYZ010  ZB ON (ZB.ZYZ_CODIGO =  ZA.ZYY_CODIGO) 
-                               INNER JOIN  SZA010 SZ ON (ZA.ZYY_PROJET =  SZ.ZA_COD) 
+                               INNER JOIN  SZA010 SZ ON (ZA.ZYY_PROJET =  SZ.ZA_COD AND SZ.ZA_STATUS = '1') 
                                LEFT JOIN  SP6010 SP ON (ZA.ZYY_CODDIV =  SP.P6_CODIGO)
                                WHERE ZA.ZYY_CODIGO = '{codigoMarcacao}'AND ZB.ZYZ_MATUSU = '{matricula}' AND ZA.D_E_L_E_T_ <> '*' ";
                     dbConnection.Open();

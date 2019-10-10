@@ -4,7 +4,7 @@ namespace TimeSheet.Domain.Interface.Service
 {
     public interface IFluigService
     {
-        string[][] IniciarProcesso(FluigProcess fluigProcess);
+        string IniciarProcesso(FluigProcess fluigProcess);
         Usuario ObterUserCodPorEmailFluig(string email);
         Marcacao ObterCodFluig(string codMarcacao);
         Marcacao ObterMarcacaoFechamentoFluig(string processId, string matricula, string codMarcacao);

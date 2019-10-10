@@ -6,8 +6,11 @@
 
   <ItemGroup>
     <Compile Remove="Enty\Repository\**" />
+    <Compile Remove="Proxy\ServiceReference\**" />
     <EmbeddedResource Remove="Enty\Repository\**" />
+    <EmbeddedResource Remove="Proxy\ServiceReference\**" />
     <None Remove="Enty\Repository\**" />
+    <None Remove="Proxy\ServiceReference\**" />
   </ItemGroup>
 
   <ItemGroup>

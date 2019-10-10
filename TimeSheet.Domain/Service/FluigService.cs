@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using TimeSheet.Domain.Enty;
 using TimeSheet.Domain.Enty.Interface;
 using TimeSheet.Domain.Interface;
@@ -15,7 +16,8 @@ namespace TimeSheet.Domain.Service
         private readonly IProtheus _prothuesSevicoRepository;
 
 
-        public FluigService(IMarcacao marcacaoServiceRepository, IFluig fluigAppServiceRepository, IProtheus protheusServicoRepository) {
+        public FluigService(IMarcacao marcacaoServiceRepository, IFluig fluigAppServiceRepository, IProtheus protheusServicoRepository)
+        {
             WSFluig = new WorkflowEngineServiceClient();
             _marcacaoServiceRepository = marcacaoServiceRepository;
             _fluigAppServiceRepository = fluigAppServiceRepository;
@@ -23,11 +25,12 @@ namespace TimeSheet.Domain.Service
         }
 
         // 
-        public string[][] IniciarProcesso(FluigProcess fluigProcess)
+        public string IniciarProcesso(FluigProcess fluigProcess)
         {
+            string retun = "";
             //WSFluig.saveAndSendTaskAsync processd id restartar um novo processo.
             // se existe um id gravado table ingual chama  WSFluig.saveAndSendTaskAsync.caso
-            return WSFluig.startProcessAsync(fluigProcess.Username,
+         retun  = WSFluig.startProcessAsync(fluigProcess.Username,
                 fluigProcess.Password,
                 fluigProcess.CompanyId,
                 fluigProcess.IdProcesso,
@@ -39,7 +42,8 @@ namespace TimeSheet.Domain.Service
                 fluigProcess.AttachmentsFluig,
                 fluigProcess.CardData,
                 fluigProcess.AppointmentFluig,
-                fluigProcess.Gestor).GetAwaiter().GetResult().result;
+                fluigProcess.Gestor).GetAwaiter().GetResult().result.ToString();
+            return retun;
         }
 
         public string[][] RestartProcessoFluig(FluigProcess fluigProcess)
@@ -58,7 +62,7 @@ namespace TimeSheet.Domain.Service
                   fluigProcess.AttachmentsFluig,
                   fluigProcess.CardData,
                   fluigProcess.AppointmentFluig,
-                  fluigProcess.Gestor,0).GetAwaiter().GetResult().result;
+                  fluigProcess.Gestor, 0).GetAwaiter().GetResult().result;
         }
         public Marcacao ObterMarcacaoFechamentoFluig(string processId, string matricula, string codMarcacao)
         {
@@ -70,9 +74,9 @@ namespace TimeSheet.Domain.Service
             return _fluigAppServiceRepository.ObterUsuarioFluig(email);
         }
 
-        public  void SalvarIdProcessoFluig(string CodMarcacao, string processId)
+        public void SalvarIdProcessoFluig(string CodMarcacao, string processId)
         {
-             _marcacaoServiceRepository.SalvarCodigoFluig(CodMarcacao, processId);
+            _marcacaoServiceRepository.SalvarCodigoFluig(CodMarcacao, processId);
         }
 
         public Marcacao ObterCodFluig(string codMarcacao)
@@ -82,7 +86,7 @@ namespace TimeSheet.Domain.Service
 
         public Usuario ObterUserGerencia(string centroCusto)
         {
-           return  _prothuesSevicoRepository.ObterCoordenadorPorCentroDeCusto(centroCusto);
+            return _prothuesSevicoRepository.ObterCoordenadorPorCentroDeCusto(centroCusto);
         }
     }
 }

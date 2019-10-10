@@ -318,7 +318,7 @@ namespace TimeSheet.Infrastructure.Repository
             Conexao.Open();
             try
             {
-
+              
                 var sqlUser = $@"Select LTRIM(RTRIM(RA_MAT)) as SubjectId, LTRIM(RTRIM(RA_NOMECMP))  as Nome from SRA010
                                   where (LTRIM(RTRIM(RA_NOMECMP)) LIKE UPPER('%{descricao}%') OR LTRIM(RTRIM(RA_MAT)) = '{descricao}') AND LTRIM(RTRIM(RA_CC)) = '{centroDeCusto}'";
                 var QueryResult = Conexao.Query<Usuario>(sqlUser).ToList();
