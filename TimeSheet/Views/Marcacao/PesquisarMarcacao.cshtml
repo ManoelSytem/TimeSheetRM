@@ -88,7 +88,7 @@
                 data: { descricao: $("#nomecolaboradorouMatricula").val() },
                 type: 'get'
             }).done(function (data) {
-                CarregarDadosEmpreendimento(data);
+                CarregarDados(data);
                 $('.loader-overlay').hide();
             });
         } else {
@@ -96,14 +96,18 @@
         }
     }
 
-        function CarregarDadosEmpreendimento(data) {
+    function CarregarDados(data) {
             $('#Lancamento_EmpreendimentoIds').empty();
-            $('#Lancamento_EmpreendimentoIds option:not(:selected)').remove();
+        $('#Lancamento_EmpreendimentoIds option:not(:selected)').remove();
+        if (data.length > 0) {
             for (var i in data) {
                 if ($('#Lancamento_Usuarios option[value="' + data[i].subjectId + '"]').val() === undefined) {
-                    $('#Lancamento_Usuarios').append('<option value="' + data[i].subjectId + '">' +'Matrícula - '+ data[i].subjectId + ' - ' + data[i].nome + '</option>');
+                        $('#Lancamento_Usuarios').append('<option value="' + data[i].subjectId + '">' + 'Matrícula - ' + data[i].subjectId + ' - ' + data[i].nome + '</option>');
                 }
             }
+        } else {
+            Information("Matrícula ou nome não encontrado.");
+        }
     }
 
     function ObterMarcacao(val) {

@@ -508,7 +508,8 @@ namespace TimeSheet.Controllers
         [HttpGet]
         public ActionResult ObterColaborador(string descricao)
         {
-            return Json(_prothuesService.ObterListColaboradorPorCentroDeCusto(descricao, User.GetDados("Centro de Custo")));
+
+            return Json(_prothuesService.ObterListColaboradorPorDescricaoMatricula(descricao, User.GetDados("Coordenacao")));
         }
 
         [HttpGet]

@@ -226,23 +226,34 @@ namespace TimeSheet.Infrastructure.Repository
         }
 
 
-        public Usuario ObterListColaborador(string descricao, string centroDeCusto)
+        public List<Usuario> ObterListColaborador(string descricao, string coordenacao)
         {
             Conexao.Open();
             try
             {
-                Usuario usuario = new Usuario();
-                var sqlUser = $@" Select CHAPA as SubjectId, NOME AS Nome from PFUNC
-                                  where (LTRIM(RTRIM(NOME)) LIKE UPPER('%{descricao}%') OR LTRIM(RTRIM(CHAPA)) = '{descricao}')";
+                List<Usuario> listUsuario = new List<Usuario>();
+                var sqlUser = $@"Select CHAPA as SubjectId, NOME AS Nome, COALESCE(PSECAOCOMPL.SIGLA,'NAO CADASTRADO') as Coordenacao                               
+                                  FROM rm.PFUNC
+                                  LEFT JOIN rm.PSECAO ON PFUNC.CODCOLIGADA = PSECAO.CODCOLIGADA
+                                  AND PFUNC.CODSECAO = PSECAO.CODIGO
+                                  LEFT JOIN rm.PSECAOCOMPL ON PSECAOCOMPL.CODCOLIGADA = PSECAO.CODCOLIGADA
+                                  AND PSECAOCOMPL.CODIGO=PSECAO.CODIGO
+                                  where (LTRIM(RTRIM(PFUNC.NOME)) LIKE UPPER('%{descricao}%') OR LTRIM(RTRIM(PFUNC.CHAPA)) = '{descricao}')
+                                   ";
                 var QueryResult = Conexao.Query<Usuario>(sqlUser);
 
                 foreach (Usuario UserResult in QueryResult)
                 {
-                    usuario.SubjectId = Convert.ToString(UserResult.Id);
-                    usuario.Nome = UserResult.Nome;
+                    if(UserResult.Coordenacao == coordenacao) { 
+                    Usuario novo = new Usuario();
+                    novo.SubjectId = Convert.ToString(UserResult.SubjectId);
+                    novo.Nome = UserResult.Nome;
+                    novo.Coordenacao = UserResult.Coordenacao;
+                    listUsuario.Add(novo);
+                    }
                 }
 
-                return usuario;
+                return listUsuario;
             }
             catch (Exception ex)
             {

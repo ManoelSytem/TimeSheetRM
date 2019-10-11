@@ -43,13 +43,9 @@ namespace TimeSheet.Infrastructure.ServiceRepository
             return _rmRepository.ObterListaCodigoDivergenciaPorIdDesc(descricao);
         }
 
-        public Usuario ObterListColaboradorPorCentroDeCusto(string descricao, string centroCusto)
-        {
-            return _rmRepository.ObterListColaborador(descricao, centroCusto);
-        }
-
         public IEnumerable<Empreendimento> ObterListEmpreendimentos(string nome)
         {
+
             return _prothuesRepository.ObterEmpreendimentos(nome);
         }
 
@@ -63,6 +59,11 @@ namespace TimeSheet.Infrastructure.ServiceRepository
         public CodDivergencia ObterTipoCodigoDivergencia(string codigoDivegencia)
         {
             return _prothuesRepository.ObterTipoCodigoDivergencia(codigoDivegencia);
+        }
+
+        public List<Usuario> ObterListColaboradorPorDescricaoMatricula(string descricaoMat, string coordenacao)
+        {
+            return _rmRepository.ObterListColaborador(descricaoMat, coordenacao);
         }
     }
 }

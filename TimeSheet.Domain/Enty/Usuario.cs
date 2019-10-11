@@ -10,6 +10,7 @@ namespace TimeSheet.Domain.Enty
         public string Nome { get; set; }
         public string Endpoint { get; set; }
         public string Gerencia { get; set; }
+        public string Coordenacao { get; set; }
         public string Email { get; set; }
         public string CodigoFluig { get; set; }
     }
