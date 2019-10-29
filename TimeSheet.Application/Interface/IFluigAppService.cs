@@ -4,7 +4,7 @@ namespace TimeSheet.Application.Interface
 {
     public interface IFluigAppService
     {
-        string IniciarProcesso(string userCodFluig, string matricula, string filial, string grupoGerencia, string codmarcacao, string coordenacao);
+        string[][] IniciarProcesso(string userCodFluig, string matricula, string filial, string grupoGerencia, string codmarcacao, string coordenacao);
         void SaveProcessIdFluigFechamento(string processId, string matricula, string codMarcacao);
         Marcacao VerificaExisteFechamentoFluig(string processId, string matricula, string codMarcacao);
         Usuario ObterUserCodFluig(string email);

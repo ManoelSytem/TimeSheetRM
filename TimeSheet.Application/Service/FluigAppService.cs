@@ -22,7 +22,7 @@ namespace TimeSheet.Application
             Configuration = configuration;
         }
 
-        public string IniciarProcesso(string userCodFluig, string matricula, string filial, string grupoGerencia, string codmarcacao, string coordenacao)
+        public string[][] IniciarProcesso(string userCodFluig, string matricula, string filial, string grupoGerencia, string codmarcacao, string coordenacao)
         {
             var fluigProcess = new FluigProcess()
             {

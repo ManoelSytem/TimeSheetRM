@@ -25,12 +25,12 @@ namespace TimeSheet.Domain.Service
         }
 
         // 
-        public string IniciarProcesso(FluigProcess fluigProcess)
+        public string[][] IniciarProcesso(FluigProcess fluigProcess)
         {
-            string retun = "";
+            
             //WSFluig.saveAndSendTaskAsync processd id restartar um novo processo.
             // se existe um id gravado table ingual chama  WSFluig.saveAndSendTaskAsync.caso
-         retun  = WSFluig.startProcessAsync(fluigProcess.Username,
+            return WSFluig.startProcessAsync(fluigProcess.Username,
                 fluigProcess.Password,
                 fluigProcess.CompanyId,
                 fluigProcess.IdProcesso,
@@ -42,8 +42,7 @@ namespace TimeSheet.Domain.Service
                 fluigProcess.AttachmentsFluig,
                 fluigProcess.CardData,
                 fluigProcess.AppointmentFluig,
-                fluigProcess.Gestor).GetAwaiter().GetResult().result.ToString();
-            return retun;
+                fluigProcess.Gestor).GetAwaiter().GetResult().result;
         }
 
         public string[][] RestartProcessoFluig(FluigProcess fluigProcess)
